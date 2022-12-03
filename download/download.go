@@ -51,7 +51,10 @@ func (g *GoDown) Download(url string) error {
 func (g *GoDown) multiDownload(url, filename string, contentLength int) error {
 	partSize := contentLength / g.concurrency
 	partDir := g.path + utils.GetPartDir(filename)
-	os.Mkdir(partDir, 0777)
+	err := os.Mkdir(partDir, 0777)
+	if err != nil {
+		log.Fatal("Unable to create directory: ", err)
+	}
 	defer os.RemoveAll(partDir)
 
 	var wg sync.WaitGroup
